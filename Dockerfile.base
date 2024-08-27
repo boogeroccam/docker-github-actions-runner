@@ -1,10 +1,7 @@
-FROM ubuntu:focal
-LABEL maintainer="myoung34@my.apsu.edu"
+FROM debian:12
+LABEL maintainer="ilia@occam.fi"
 
-ARG DUMB_INIT_VERSION="1.2.2"
 ARG GIT_CORE_PPA_KEY="A1715D88E1DF1F24"
-
-# TODO: remove git PPA and skopeo customizations for focal when focal hits EOL
 ENV GIT_LFS_VERSION="3.2.0"
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US.UTF-8
@@ -54,6 +51,7 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
     libpq-dev \
     gosu \
     pkg-config \
+    vim \
   && DPKG_ARCH="$(dpkg --print-architecture)" \
   && LSB_RELEASE_CODENAME="$(lsb_release --codename | cut -f2)" \
   && sed -e 's/Defaults.*env_reset/Defaults env_keep = "HTTP_PROXY HTTPS_PROXY NO_PROXY FTP_PROXY http_proxy https_proxy no_proxy ftp_proxy"/' -i /etc/sudoers \
@@ -93,3 +91,49 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
   && usermod -aG docker runner \
   && echo '%sudo ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers \
   && ( [[ -f /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list ]] && rm /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list || : )
+
+ARG KUBECTL_VERSION=v1.31.0
+ARG SOPS_VER=v3.9.0
+  
+# install sops
+RUN curl -L https://github.com/getsops/sops/releases/download/${SOPS_VER}/sops-${SOPS_VER}.linux.amd64 -o /usr/local/bin/sops &&\
+    chmod +x /usr/local/bin/sops
+# install age
+RUN curl -Ls https://github.com/FiloSottile/age/releases/download/v1.2.0/age-v1.2.0-linux-amd64.tar.gz | tar xz --strip-components=1 -C /usr/local/bin age/age
+
+# install kubectl
+RUN curl -L "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl && \
+    chmod +x /usr/local/bin/kubectl
+
+# install helm
+RUN curl https://get.helm.sh/helm-canary-linux-amd64.tar.gz | tar xz --strip-components=1 -C /usr/local/bin linux-amd64/helm
+
+# install ansible # https://docs.ansible.com/ansible/latest/installation_guide/installation_distros.html#installing-ansible-on-debian
+RUN export UBUNTU_CODENAME=jammy && \
+    DEBIAN_FRONTEND=noninteractive && \
+    wget -O- "https://keyserver.ubuntu.com/pks/lookup?fingerprint=on&op=get&search=0x6125E2A8C77F2818FB7BD15B93C4A3FD7BB9C367" | sudo gpg --dearmour -o /usr/share/keyrings/ansible-archive-keyring.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/ansible-archive-keyring.gpg] http://ppa.launchpad.net/ansible/ansible/ubuntu $UBUNTU_CODENAME main" | sudo tee /etc/apt/sources.list.d/ansible.list && \
+    sudo apt update && sudo apt install -y --no-install-recommends ansible
+
+ENV AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
+RUN mkdir -p /opt/hostedtoolcache
+
+ARG GH_RUNNER_VERSION="2.319.1"
+
+ARG TARGETPLATFORM
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+WORKDIR /actions-runner
+COPY install_actions.sh /actions-runner
+
+RUN chmod +x /actions-runner/install_actions.sh \
+  && /actions-runner/install_actions.sh ${GH_RUNNER_VERSION} ${TARGETPLATFORM} \
+  && rm /actions-runner/install_actions.sh \
+  && chown runner /_work /actions-runner /opt/hostedtoolcache
+
+COPY prepare.sh token.sh entrypoint.sh app_token.sh /
+RUN chmod +x /token.sh /entrypoint.sh /app_token.sh /prepare.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["./bin/Runner.Listener", "run", "--startuptype", "service"]
