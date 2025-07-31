@@ -3,8 +3,9 @@
 echo "Checking kube dir"
 if [ ! -d $HOME/.kube ];
 then
-    "echo $HOME.kube doesnt existing, creating"
+    "echo $HOME/.kube doesnt existing, creating"
     mkdir $HOME/.kube
+    touch $HOME/.kube/config
 elif [ -d $HOME/.kube ];
 then
     echo "found /root/.kube dir"
@@ -12,4 +13,4 @@ then
     rm -rvf $HOME/.kube/*
     touch $HOME/.kube/config
 fi
-echo "$HOME.kube prepared"
+echo "$HOME/.kube prepared"
