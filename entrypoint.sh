@@ -245,6 +245,22 @@ if [[ ${_UNSET_CONFIG_VARS} == "true" ]]; then
   unset_config_vars
 fi
 
+# Prepare kube config dir
+echo "Checking kube dir"
+if [ ! -d $HOME/.kube ];
+then
+    "echo $HOME.kube doesnt existing, creating"
+    mkdir $HOME/.kube
+elif [ -d $HOME/.kube ];
+then
+    echo "found /root/.kube dir"
+    echo "cleaning"
+    rm -rvf $HOME/.kube/*
+    touch $HOME/.kube/config
+fi
+echo "$HOME.kube prepared"
+
+
 # Container's command (CMD) execution as runner user
 
 

@@ -7,9 +7,7 @@
     {
       "category": "aws",
       "source": "script",
-      "packages": [
-        "aws-cli"
-      ]
+      "packages": ["aws-cli"]
     },
     {
       "category": "development",
@@ -28,69 +26,47 @@
     {
       "category": "container-tools",
       "source": "script",
-      "packages": [
-        "container-tools"
-      ]
+      "packages": ["container-tools"]
     },
     {
       "category": "debugging",
       "source": "script",
-      "packages": [
-        "liblttng-ust"
-      ]
+      "packages": ["liblttng-ust"]
     },
     {
       "category": "docker-cli",
       "source": "script",
-      "packages": [
-        "docker-cli"
-      ]
+      "packages": ["docker-cli"]
     },
     {
       "category": "docker",
       "source": "script",
-      "packages": [
-        "docker"
-      ]
+      "packages": ["docker"]
     },
     {
       "category": "git",
       "source": "script",
-      "packages": [
-        "git",
-        "git-lfs"
-      ]
+      "packages": ["git", "git-lfs"]
     },
     {
       "category": "github",
       "source": "script",
-      "packages": [
-        "github-cli"
-      ]
+      "packages": ["github-cli"]
     },
     {
       "category": "network-tools",
       "source": "apt",
-      "packages": [
-        "inetutils-ping",
-        "wget",
-        "openssh-client",
-        "rsync"
-      ]
+      "packages": ["inetutils-ping", "wget", "openssh-client", "rsync"]
     },
     {
       "category": "node",
       "source": "apt",
-      "packages": [
-        "nodejs"
-      ]
+      "packages": ["nodejs"]
     },
     {
       "category": "powershell",
       "source": "script",
-      "packages": [
-        "powershell"
-      ]
+      "packages": ["powershell"]
     },
     {
       "category": "python",
@@ -99,15 +75,19 @@
         "python3",
         "python3-pip",
         "python3-setuptools",
-        "python3-venv"
+        "python3-venv",
+        "ansible"
       ]
     },
     {
       "category": "yq",
       "source": "script",
-      "packages": [
-        "yq"
-      ]
+      "packages": ["yq"]
+    },
+    {
+      "category": "kubernetes",
+      "source": "script",
+      "packages": ["kubectl", "helm"]
     }
   ]
 }

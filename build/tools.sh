@@ -107,6 +107,15 @@ function install_powershell() {
   ln -s /opt/powershell/pwsh /usr/bin/pwsh
 }
 
+function install_kubectl() {
+    local KUBECTL_VERSION=$(curl -sL https://dl.k8s.io/release/stable.txt)
+    curl -L "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl && chmod +x /usr/local/bin/kubectl
+}
+
+function install_helm() {
+    curl https://get.helm.sh/helm-canary-linux-amd64.tar.gz | tar xz --strip-components=1 -C /usr/local/bin linux-amd64/helm
+}
+
 function install_tools() {
   local function_name
   # shellcheck source=/dev/null
