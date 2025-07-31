@@ -6,4 +6,4 @@ docker/full: docker/base
 	docker buildx build --file Dockerfile --platform linux/amd64 --tag registry.fulgur.tech/library/github-runner:$(date) .
 
 docker/push:
-    docker push registry.fulgur.tech/library/github-runner:$(date)
+	docker push registry.fulgur.tech/library/github-runner:$(date)
