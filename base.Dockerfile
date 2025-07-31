@@ -1,0 +1,15 @@
+FROM debian:12
+LABEL maintainer="ilya@occam.fi"
+
+ARG DUMB_INIT_VERSION="1.2.2"
+# TODO: remove git PPA and skopeo customizations for focal when focal hits EOL
+ENV GIT_LFS_VERSION="3.2.0"
+
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+ENV DEBIAN_FRONTEND=noninteractive
+
+COPY --chmod=700 build/ /tmp/build/
+RUN /tmp/build/install_base.sh
