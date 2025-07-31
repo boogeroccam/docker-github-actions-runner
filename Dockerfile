@@ -1,6 +1,6 @@
 # hadolint ignore=DL3007
-FROM myoung34/github-runner-base:latest
-LABEL maintainer="myoung34@my.apsu.edu"
+FROM registry.fulgur.tech/library/github-runner-base-debian
+LABEL maintainer="ilya@occam.fi"
 
 ENV AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
 RUN mkdir -p /opt/hostedtoolcache
@@ -15,9 +15,9 @@ WORKDIR /actions-runner
 COPY install_actions.sh /actions-runner
 
 RUN chmod +x /actions-runner/install_actions.sh \
-  && /actions-runner/install_actions.sh ${GH_RUNNER_VERSION} ${TARGETPLATFORM} \
-  && rm /actions-runner/install_actions.sh \
-  && chown runner /_work /actions-runner /opt/hostedtoolcache
+    && /actions-runner/install_actions.sh ${GH_RUNNER_VERSION} ${TARGETPLATFORM} \
+    && rm /actions-runner/install_actions.sh \
+    && chown runner /_work /actions-runner /opt/hostedtoolcache
 
 COPY token.sh entrypoint.sh app_token.sh /
 RUN chmod +x /token.sh /entrypoint.sh /app_token.sh

@@ -1,5 +1,5 @@
-FROM ubuntu:focal
-LABEL maintainer="myoung34@my.apsu.edu"
+FROM debian:12
+LABEL maintainer="ilya@occam.fi"
 
 ARG DUMB_INIT_VERSION="1.2.2"
 # TODO: remove git PPA and skopeo customizations for focal when focal hits EOL
