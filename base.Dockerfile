@@ -13,3 +13,4 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 COPY --chmod=700 build/ /tmp/build/
 RUN /tmp/build/install_base.sh
+COPY prepare.sh /prepare.sh
