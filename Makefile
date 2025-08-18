@@ -1,4 +1,5 @@
 date:=$(shell date +'v0.%Y%m%d')
+ci: docker/full docker/push
 docker/base:
 	docker buildx build --file base.Dockerfile --platform linux/amd64 --tag registry.fulgur.tech/library/github-runner-base-debian .
 
