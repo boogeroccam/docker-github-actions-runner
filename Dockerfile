@@ -5,7 +5,7 @@ LABEL maintainer="ilya@occam.fi"
 ENV AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
 RUN mkdir -p /opt/hostedtoolcache
 
-ARG GH_RUNNER_VERSION="2.327.1"
+ARG GH_RUNNER_VERSION="2.328"
 
 ARG TARGETPLATFORM
 
