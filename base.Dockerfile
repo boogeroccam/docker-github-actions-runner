@@ -1,4 +1,4 @@
-FROM debian:12
+FROM debian:13
 LABEL maintainer="ilya@occam.fi"
 
 ARG DUMB_INIT_VERSION="1.2.2"
